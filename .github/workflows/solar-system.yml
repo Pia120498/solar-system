@@ -7,6 +7,11 @@ on:
             - main
             - 'feature/*'    #to run on push to any feature branch
 
+env:
+    MONGO_URI: mongodb+srv://supercluster.d83jj.mongodb.net/superData   #to provide mongodb URI
+    MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}    #to store MongoDB username in repo variables
+    MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}    #to securely store MongoDB password
+
 jobs:
     unit-testing:
         runs-on: ubuntu-latest    #to run the job on the latest version of Ubuntu
