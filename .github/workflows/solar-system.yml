@@ -42,9 +42,9 @@ jobs:
               uses: actions/checkout@v4    #to check out the code from the repository
 
             - name: Set up Node.js
-              uses: actions/setup-node@v3    #to set up Node.js environment
+              uses: actions/setup-node@v4    #to set up Node.js environment
               with:
-                  node-version: ${{matrix.node-version}}    #specify the version of Node.js to use
+                  node-version: 18    #specify the version of Node.js to use
 
             - name: Install dependencies
               run: npm install    #to install the project dependencies
