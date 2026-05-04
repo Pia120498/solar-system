@@ -43,3 +43,30 @@ jobs:
               with:
                   name: test-results
                   path: test-results.xml    #specify the path to the test results directory
+
+
+
+    code-coverage:
+        runs-on: ubuntu-latest    #to run the job on the latest version of Ubuntu
+        name: Code Coverage
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4    #to check out the code from the repository
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3    #to set up Node.js environment
+              with:
+                  node-version: ${{matrix.node-version}}    #specify the version of Node.js to use
+
+            - name: Install dependencies
+              run: npm install    #to install the project dependencies
+
+            - name: Check code coverage
+              run: npm run coverage    #to run the code coverage command defined in the project
+
+            - name: Upload code coverage report
+              uses: actions/upload-artifact@v7    #to upload code coverage report as an artifact
+              with:
+                  name: code-coverage-report
+                  path: coverage       #specify the path to the code coverage report directory
+                  retention-days: 5    #specify the number of days to retain the artifact
