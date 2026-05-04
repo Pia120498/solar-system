@@ -39,7 +39,7 @@ jobs:
               run: npm test    #to run the unit tests defined in the project
 
             - name: Archieve test results
-              continue-on-error: true 
+              if: always() 
               uses: actions/upload-artifact@v7    #to upload test results as an artifact
               with:
                   name: test-results
