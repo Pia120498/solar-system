@@ -14,38 +14,25 @@ env:
 
 jobs:
     unit-testing:
-        runs-on: ${{matrix.os}}    #to run the job on the latest version of Ubuntu
         name: Unit Testing
-        strategy:
-            matrix:
-                node-version: [18,24]    #to specify the Node.js version for testing
-                os: [ubuntu-latest, macos-latest]    #to specify the operating systems for testing
-                exclude:
-                    - node-version: 18
-                      os: macos-latest    #to exclude Node.js 18 on macOS due to compatibility issues
+        runs-on: ubuntu-latest
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4    #to check out the code from the repository
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v3    #to set up Node.js environment
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+            - name: Setup NodeJS Version
+              uses: actions/setup-node@v4
               with:
-                  node-version: ${{matrix.node-version}}    #specify the version of Node.js to use
-
-            - name: Install dependencies
-              run: npm install    #to install the project dependencies
-
-            - name: Run unit tests
-              run: npm test    #to run the unit tests defined in the project
-
-            - name: Archieve test results
-              if: always() 
-              uses: actions/upload-artifact@v7    #to upload test results as an artifact
+                node-version: 20
+            - name: Install Dependencies
+              run: npm install
+            - name: Unit Testing
+              run: npm test
+            - name: Archive Test Result
+              if: always()      #added
+              uses: actions/upload-artifact@v4
               with:
-                  name: test-results
-                  path: test-results.xml    #specify the path to the test results directory
-
-
+                name: Mocha-Test-Result
+                path: test-results.xml
 
     code-coverage:
         runs-on: ubuntu-latest    #to run the job on the latest version of Ubuntu
