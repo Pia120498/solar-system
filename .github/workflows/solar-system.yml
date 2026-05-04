@@ -30,3 +30,9 @@ jobs:
 
             - name: Run unit tests
               run: npm test    #to run the unit tests defined in the project
+
+            - name: Archieve test results
+              uses: actions/upload-artifact@v3    #to upload test results as an artifact
+              with:
+                  name: test-results
+                  path: test-results.xml    #specify the path to the test results directory
