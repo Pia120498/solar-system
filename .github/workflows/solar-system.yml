@@ -89,6 +89,13 @@ jobs:
                   username: ${{ vars.DOCKER_USERNAME }}    #Docker Hub username stored in GitHub secrets
                   password: ${{ secrets.DOCKER_PASSWORD }}    #Docker Hub password stored in GitHub secrets
 
+            - name: Log in to GCHR
+              uses: docker/login-action@v2    #to log in to GHCR using credentials stored in GitHub secrets
+              with:
+                  registry: ghcr.io    #to specify the GitHub Container Registry as the registry to log in to
+                  username: ${{ github.repository_owner }}   #to specify the GitHub repository owner as the username for logging in to GitHub Container Registry
+                  password: ${{ secrets.GITHUB_TOKEN }}    #to use the GitHub token for authentication when logging in to GitHub Container Registry
+
             - name: docker build for testing
               uses: docker/build-push-action@v4    #to build the Docker image for testing
               with:
@@ -118,11 +125,13 @@ jobs:
                   
                   wget -q -O - 127.0.0.1:3000/live | grep live    #to test the live endpoint of the application running in the Docker container
             
-            - name: docker push to Docker Hub
+            - name: Pushing image to container registries
               uses: docker/build-push-action@v4    #to build the Docker image for testing
               with:
                   context: .    #specify the build context
                   file: ./Dockerfile    #specify the path to the Dockerfile
                   push: true    #to indicate that the image should be pushed to Docker Hub
-                  tags: ${{vars.DOCKER_USERNAME}}/solar-system:${{github.sha}}   #specify the tag for the Docker image
+                  tags: |
+                      ghcr.io/${{github.repository_owner}}/solar-system:${{github.sha}}    #specify the tag for the Docker image in GitHub Container Registry
+                      ${{vars.DOCKER_USERNAME}}/solar-system:${{github.sha}}   #specify the tag for the Docker image
                 
