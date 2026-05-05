@@ -89,4 +89,10 @@ jobs:
                   username: ${{ vars.DOCKER_USERNAME }}    #Docker Hub username stored in GitHub secrets
                   password: ${{ secrets.DOCKER_PASSWORD }}    #Docker Hub password stored in GitHub secrets
 
-           
+            - name: docker build for testing
+              uses: docker/build-push-action@v4    #to build the Docker image for testing
+              with:
+                  context: .    #specify the build context
+                  file: ./Dockerfile    #specify the path to the Dockerfile
+                  push: false    #to indicate that the image should not be pushed to Docker Hub
+                  tags: ${{vars.DOCKER_USERNAME}}/solar-system:${{github.sha}}   #specify the tag for the Docker image
