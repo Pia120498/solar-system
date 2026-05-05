@@ -22,7 +22,7 @@ jobs:
             - name: Setup NodeJS Version
               uses: actions/setup-node@v4
               with:
-                  node-version: ${{matrix.node-version}}    #specify the version of Node.js to use
+                  node-version: 20   #specify the version of Node.js to use
 
             - name: Cache dependencies
               uses: actions/cache@v3    #to cache the node_modules directory for faster builds
@@ -53,8 +53,8 @@ jobs:
             - name: Set up Node.js
               uses: actions/setup-node@v4    #to set up Node.js environment
               with:
-                  node-version: ${{matrix.node-version}}    #specify the version of Node.js to use
-                  
+                  node-version: 20   #specify the version of Node.js to use
+
             - name: Cache dependencies
               uses: actions/cache@v3    #to cache the node_modules directory for faster builds
               with:
