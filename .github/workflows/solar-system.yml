@@ -16,8 +16,6 @@ jobs:
     unit-testing:
         name: Unit Testing
         runs-on: ubuntu-latest
-        permissions:
-            packages: write    #to allow the job to write to GitHub Packages, which is necessary for pushing Docker images to GHCR
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
@@ -80,6 +78,8 @@ jobs:
     docker:
         name: Docker Build
         needs: [unit-testing, code-coverage]    #to ensure that this job runs after the unit testing and code coverage jobs
+        permissions:
+            packages: write    #to allow the workflow to write to GitHub Packages (for pushing Docker images to GHCR)
         runs-on: ubuntu-latest    #to run the job on the latest version of Ubuntu
         steps:
             - name: Checkout code
