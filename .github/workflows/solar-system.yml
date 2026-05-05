@@ -76,8 +76,9 @@ jobs:
                   retention-days: 5    #specify the number of days to retain the artifact
 
     docker:
-        runs-on: ubuntu-latest    #to run the job on the latest version of Ubuntu
         name: Docker Build
+        needs: [unit-testing, code-coverage]    #to ensure that this job runs after the unit testing and code coverage jobs
+        runs-on: ubuntu-latest    #to run the job on the latest version of Ubuntu
         steps:
             - name: Checkout code
               uses: actions/checkout@v4    #to check out the code from the repository
