@@ -22,14 +22,23 @@ jobs:
             - name: Setup NodeJS Version
               uses: actions/setup-node@v4
               with:
-                node-version: 20
-            - name: Install Dependencies
-              run: npm install
-            - name: Unit Testing
-              run: npm test
-            - name: Archive Test Result
-              if: always()      #added
-              uses: actions/upload-artifact@v4
+                  node-version: ${{matrix.node-version}}    #specify the version of Node.js to use
+
+            - name: Cache dependencies
+              uses: actions/cache@v3    #to cache the node_modules directory for faster builds
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+
+            - name: Install dependencies
+              run: npm install    #to install the project dependencies
+
+            - name: Run unit tests
+              run: npm test    #to run the unit tests defined in the project
+
+            - name: Archive test results
+              uses: actions/upload-artifact@v7    #to upload test results as an artifact
+              if: always()    #to ensure that the artifact is uploaded even if the tests fail
               with:
                 name: Mocha-Test-Result
                 path: test-results.xml
@@ -44,7 +53,13 @@ jobs:
             - name: Set up Node.js
               uses: actions/setup-node@v4    #to set up Node.js environment
               with:
-                  node-version: 18    #specify the version of Node.js to use
+                  node-version: ${{matrix.node-version}}    #specify the version of Node.js to use
+                  
+            - name: Cache dependencies
+              uses: actions/cache@v3    #to cache the node_modules directory for faster builds
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
 
             - name: Install NodeJS dependencies
               run: npm install    #to install the project dependencies
