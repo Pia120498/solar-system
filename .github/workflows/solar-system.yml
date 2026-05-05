@@ -117,3 +117,12 @@ jobs:
                   echo "Testing image url using wget command"    #to indicate that the workflow is testing the image URL using wget
                   
                   wget -q -O - 127.0.0.1:3000/live | grep live    #to test the live endpoint of the application running in the Docker container
+            
+            - name: docker push to Docker Hub
+              uses: docker/build-push-action@v4    #to build the Docker image for testing
+              with:
+                  context: .    #specify the build context
+                  file: ./Dockerfile    #specify the path to the Dockerfile
+                  push: true    #to indicate that the image should be pushed to Docker Hub
+                  tags: ${{vars.DOCKER_USERNAME}}/solar-system:${{github.sha}}   #specify the tag for the Docker image
+                
