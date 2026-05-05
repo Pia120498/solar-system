@@ -122,6 +122,10 @@ jobs:
                   
                   echo "Testing image url using wget command"   
                   wget -q -O - 127.0.0.1:3000/live | grep live    
+
+            - name: Set lowercase owner
+              run: echo "OWNER_LC=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
             
             - name: Pushing image to container registries
               uses: docker/build-push-action@v4    #to build the Docker image for testing
@@ -130,5 +134,5 @@ jobs:
                   file: ./Dockerfile    #specify the path to the Dockerfile
                   push: true    #to indicate that the image should be pushed to Docker Hub
                   tags: |
-                      ghcr.io/${{github.repository_owner}}/solar-system:${{github.sha}}    
+                      ghcr.io/${{ env.OWNER_LC }}/solar-system:${{ github.sha }}   
                       ${{vars.DOCKER_USERNAME}}/solar-system:${{github.sha}}   
