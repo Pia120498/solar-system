@@ -16,6 +16,8 @@ jobs:
     unit-testing:
         name: Unit Testing
         runs-on: ubuntu-latest
+        permissions:
+            packages: write    #to allow the job to write to GitHub Packages, which is necessary for pushing Docker images to GHCR
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
