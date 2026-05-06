@@ -82,7 +82,7 @@ jobs:
             packages: write    #to allow the workflow to write to GitHub Packages (for pushing Docker images to GHCR)
         runs-on: ubuntu-latest    #to run the job on the latest version of Ubuntu
         steps:
-            - name: Checkout code
+            - name: Checkout Repository
               uses: actions/checkout@v4    #to check out the code from the repository
 
             - name: Log in to Docker Hub
@@ -125,10 +125,6 @@ jobs:
                   echo "Testing image url using wget command"   
                   wget -q -O - 127.0.0.1:3000/live | grep live    
 
-            - name: Set lowercase owner
-              run: echo "OWNER_LC=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-
-            
             - name: Pushing image to container registries
               uses: docker/build-push-action@v4    #to build the Docker image for testing
               with:
