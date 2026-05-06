@@ -132,5 +132,5 @@ jobs:
                   file: ./Dockerfile    #specify the path to the Dockerfile
                   push: true    #to indicate that the image should be pushed to Docker Hub
                   tags: |
-                      ghcr.io/${{ env.OWNER_LC }}/solar-system:${{ github.sha }}   
+                      ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}   
                       ${{vars.DOCKER_USERNAME}}/solar-system:${{github.sha}}   
