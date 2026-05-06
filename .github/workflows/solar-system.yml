@@ -16,16 +16,18 @@ jobs:
     unit-testing:
         name: Unit Testing
         runs-on: ubuntu-latest
+        container:        #added
+          image: 'node:20' #added
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
-            - name: Setup NodeJS Version
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20   #specify the version of Node.js to use
+            # - name: Setup NodeJS Version
+            #   uses: actions/setup-node@v4
+            #   with:
+            #       node-version: 20   #specify the version of Node.js to use
 
             - name: Cache dependencies
-              uses: actions/cache@v3    #to cache the node_modules directory for faster builds
+              uses: actions/cache@v4    #to cache the node_modules directory for faster builds
               with:
                   path: node_modules
                   key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
@@ -42,6 +44,8 @@ jobs:
               with:
                 name: Mocha-Test-Result
                 path: test-results.xml
+
+
 
     code-coverage:
         runs-on: ubuntu-latest    #to run the job on the latest version of Ubuntu
