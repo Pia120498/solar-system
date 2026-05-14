@@ -137,4 +137,37 @@ jobs:
                   push: true    #to indicate that the image should be pushed to Docker Hub
                   tags: |
                       ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}   
-                      ${{vars.DOCKER_USERNAME}}/solar-system:${{github.sha}}   
+                      ${{vars.DOCKER_USERNAME}}/solar-system:${{github.sha}}  
+    dev-deploy:
+        needs: docker    #to ensure that this job runs after the docker job
+        name: Deploy to Development
+        environment: development    #to specify that this job is for the development environment
+        runs-on: ubuntu-latest    #to run the job on the latest version of Ubuntu
+        steps:
+           
+            - name: install cluster
+              uses: helm/kind-action@v1
+            - run: |
+                sleep 60
+                kubectl -n kube-system get pod
+                set +e
+                REPO_OWNER_LC="${GITHUB_REPOSITORY_OWNER,,}"
+                kubectl run solar --image ghcr.io/${REPO_OWNER_LC}/solar-system:${{ github.sha }} \
+                  --env MONGO_URI=${{ env.MONGO_URI}} \
+                  --env MONGO_USERNAME=${{ env.MONGO_USERNAME}} \
+                  --env MONGO_PASSWORD=${{ env.MONGO_PASSWORD}}
+                set -e
+                echo "kubectl returned $?"
+                kubectl -n default get pod
+                sleep 10
+
+
+            
+            - name: fetch kubernetes cluster details
+              run: |
+                  kubectl version --short    #to check the version of kubectl installed
+                  echo --------------------------------------
+                  kubectl get nodes -o wide    #to get the details of the nodes in the Kubernetes cluster
+                  echo --------------------------------------
+                
+          
