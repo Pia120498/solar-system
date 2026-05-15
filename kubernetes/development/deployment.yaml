@@ -1,29 +1,60 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   labels:
     app: solar-system
   name: solar-system
   namespace: ${NAMESPACE}
+
 spec:
   replicas: ${REPLICAS}
+
   selector:
     matchLabels:
       app: solar-system
-  strategy: {}
+
   template:
     metadata:
       labels:
         app: solar-system
+
     spec:
       containers:
-      - image: ${K8S_IMAGE}
-        imagePullPolicy: Always
-        name: solar-system
-        ports:
-        - containerPort: 3000
-          name: http
-          protocol: TCP
-        envFrom:
-        - secretRef:
-            name: mongo-db-creds
+        - image: ${K8S_IMAGE}
+
+          imagePullPolicy: Always
+
+          name: solar-system
+
+          ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+
+          envFrom:
+            - secretRef:
+                name: mongo-db-creds
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+
+          readinessProbe:
+            httpGet:
+              path: /live
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
