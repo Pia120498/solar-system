@@ -162,12 +162,4 @@ jobs:
                 sleep 10
 
 
-            
-            - name: fetch kubernetes cluster details
-              run: |
-                  kubectl version --short    #to check the version of kubectl installed
-                  echo --------------------------------------
-                  kubectl get nodes -o wide    #to get the details of the nodes in the Kubernetes cluster
-                  echo --------------------------------------
-                
           
